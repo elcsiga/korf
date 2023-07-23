@@ -13,9 +13,9 @@ const { app, getWss } = expressWs(express());
 const port = process.env.PORT || 3000;
 app.set("port", port);
 
-app.use(express.static('public', {
+app.use(express.static('dist/public', {
     setHeaders: function (res, path) {
-        res.set("korf-Port", `${port}`);
+        res.set("korf-port", `${port}`);
     }
 }));
 

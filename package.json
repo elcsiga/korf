@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npm run ui && tsc && node dist/index.js",
+    "start": "node dist/index.js",
     "build": "npm run ui && tsc",
     "dev": "npm run ui && tsc && node dist/index.js",
     "test": "echo \"Error: no test specified\" ",
@@ -12,7 +12,7 @@
     "ui:install": "cd korf-ui && npm install",
     "ui:clean": "rimraf public",
     "ui:build": "cd korf-ui && npm run build",
-    "ui:copy": "copyfiles -u 2 \"korf-ui/dist/**/*.*\" public",
+    "ui:copy": "copyfiles -u 2 \"korf-ui/dist/**/*.*\" dist/public",
     "ui": "npm run ui:clean && npm run ui:build && npm run ui:copy",
     "deploy": "npm run ui && tsc && git commit -a -m deploy && git push"
   },
