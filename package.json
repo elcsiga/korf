@@ -5,10 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "npm run ui && tsc",
     "dev": "npm run ui && tsc && node dist/index.js",
     "test": "echo \"Error: no test specified\" ",
-    "preinstall": "npm run ui:install",
     "ui:install": "cd korf-ui && npm install",
     "ui:clean": "rimraf public",
     "ui:build": "cd korf-ui && npm run build",
