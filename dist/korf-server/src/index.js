@@ -1,64 +1,52 @@
-
-import express from 'express';
-import WebSocket from 'ws';
-import expressWs from 'express-ws';
-
-import { v4 as uuid } from 'uuid';
-
-import {
-    AppState,
-    initialAppState,
-    Team,
-    Workstation
-} from '../../korf-ui/src/shared/types';
-import {
-    Command,
-    CreateWorkstationCommand as RegisterWorkstationCommand,
-    CreateTeamCommand
-} from '../../korf-ui/src/shared/commands';
-
-const { app, getWss } = expressWs(express());
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const express_ws_1 = __importDefault(require("express-ws"));
+const uuid_1 = require("uuid");
+const types_1 = require("../../korf-ui/src/shared/types");
+const { app, getWss } = (0, express_ws_1.default)((0, express_1.default)());
 const port = process.env.PORT || 3000;
 app.set("port", port);
-
-app.use(express.static('dist/public', {
+app.use(express_1.default.static('dist/public', {
     setHeaders: function (res, path) {
         res.set("korf-port", `${port}`);
     }
 }));
-
-const appState = initialAppState;
-
+const appState = types_1.initialAppState;
 app.ws('/ws', (ws, req) => {
     const sendStateToAll = () => {
         getWss().clients.forEach((clientWs) => {
             clientWs.send(JSON.stringify(appState));
         });
-    }
-
-    ws.on('message', (message: string) => {
-        const command: Command = JSON.parse(message);
+    };
+    ws.on('message', (message) => {
+        const command = JSON.parse(message);
         switch (command.type) {
             case 'CreateWorkstation': {
-                const createWorkstationCommand = command as RegisterWorkstationCommand;
+                const createWorkstationCommand = command;
                 const existingWorkstation = appState.workstations.find((w) => w.id === createWorkstationCommand.id);
                 if (existingWorkstation) {
                     console.log('Workstation connected');
-                } else {
+                }
+                else {
                     console.log('RegisterNew Workstation');
-                    const workstation: Workstation = {
+                    const workstation = {
                         id: createWorkstationCommand.id
-                    }; appState.workstations.push(workstation);
+                    };
+                    appState.workstations.push(workstation);
                 }
                 break;
             }
             case 'CreateTeam': {
-                const createTeamCommand = command as CreateTeamCommand;
+                const createTeamCommand = command;
                 console.log('Create Team');
-                const team: Team = {
-                    id: uuid(),
+                const team = {
+                    id: (0, uuid_1.v4)(),
                     name: createTeamCommand.name,
-                }
+                };
                 appState.teams.push(team);
                 break;
             }
@@ -66,18 +54,18 @@ app.ws('/ws', (ws, req) => {
                 console.error('Unknown command!');
                 break;
             }
-        };
+        }
+        ;
         sendStateToAll();
     });
-
     ws.on('close', function () {
         //const client = getClient();
         //client.ws = null;
-        console.log('Disconnected: ') //, client.clientId);
+        console.log('Disconnected: '); //, client.clientId);
         sendStateToAll();
     });
 });
-
 app.listen(port, () => {
-    console.log(`korf is listening at http://localhost:${port}`)
+    console.log(`korf is listening at http://localhost:${port}`);
 });
+//# sourceMappingURL=index.js.map
