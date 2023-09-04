@@ -3,14 +3,12 @@ export interface AppState {
     workstations: Workstation[];
     games: Game[];
     teams: Team[];
-    player: Player[];
 }
 
 export const initialAppState: AppState = {
     workstations: [],
     games: [],
-    teams: [],
-    player: [],
+    teams: []
 }
 
 export interface Workstation {
@@ -20,6 +18,7 @@ export interface Workstation {
 export interface Team {
     id: string;
     name: string;
+    players: Player[];
 }
 
 export interface Player {

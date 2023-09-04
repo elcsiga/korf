@@ -1,13 +1,20 @@
 import { derived, readable } from 'svelte/store';
 
 import type { AppState } from '../shared/types';
-import { Command, CreateTeamCommand, CreateWorkstationCommand } from '../shared/commands';
+import { type Command, ConnectWorkstationCommand } from '../shared/commands/commands';
 import { v4 as uuid } from 'uuid';
+import { commands } from '../shared/commands/command-list-generated';
 
 const workstationIdStorageKey = 'korf-workstation-id';
 
 let socket: WebSocket;
 export function send(data: Command) {
+    commands.forEach((command) => {
+        if (data instanceof command.class) {
+            data.type = command.name;
+        }
+    });
+
     if (socket) {
         console.log('SEND: ', data);
         socket.send(JSON.stringify(data));
@@ -32,7 +39,7 @@ export const appState = readable<AppState>(null, (set) => {
             id = uuid();
             window.sessionStorage.setItem(workstationIdStorageKey, id);
         }
-        send( new CreateWorkstationCommand( id ));
+        send(new ConnectWorkstationCommand(id));
     });
 
     return function stop() {

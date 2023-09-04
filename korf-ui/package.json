@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npm run build-commands && vite",
+    "build": "npm run build-commands && vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "build-commands": "node src/scripts/build-commands.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
@@ -27,6 +28,8 @@
     "flowbite": "^1.8.1",
     "flowbite-svelte": "^0.43.2",
     "flowbite-svelte-icons": "^0.3.6",
+    "svelte-forms": "^2.3.1",
+    "svelte-routing": "^2.1.0",
     "tailwind-merge": "^1.14.0"
   }
 }

@@ -1,21 +1,14 @@
 
 import express from 'express';
-import WebSocket from 'ws';
 import expressWs from 'express-ws';
 
-import { v4 as uuid } from 'uuid';
-
 import {
-    AppState,
     initialAppState,
-    Team,
-    Workstation
 } from '../../korf-ui/src/shared/types';
-import {
-    Command,
-    CreateWorkstationCommand as RegisterWorkstationCommand,
-    CreateTeamCommand
-} from '../../korf-ui/src/shared/commands';
+
+import { commands } from '../../korf-ui/src/shared/commands/command-list-generated';
+import { Command } from '../../korf-ui/src/shared/commands/commands';
+import { save, load } from './storage';
 
 const { app, getWss } = expressWs(express());
 const port = process.env.PORT || 3000;
@@ -27,55 +20,53 @@ app.use(express.static('dist/public', {
     }
 }));
 
-const appState = initialAppState;
+let appState = initialAppState;
+load((s) => appState = s);
+let saveRequired = false;
+setInterval(() => {
+    if (saveRequired) {
+        save(appState);
+    }
+    saveRequired = false;
+}, 5000);
 
 app.ws('/ws', (ws, req) => {
     const sendStateToAll = () => {
         getWss().clients.forEach((clientWs) => {
             clientWs.send(JSON.stringify(appState));
         });
+        saveRequired = true;
     }
 
     ws.on('message', (message: string) => {
-        const command: Command = JSON.parse(message);
-        switch (command.type) {
-            case 'CreateWorkstation': {
-                const createWorkstationCommand = command as RegisterWorkstationCommand;
-                const existingWorkstation = appState.workstations.find((w) => w.id === createWorkstationCommand.id);
-                if (existingWorkstation) {
-                    console.log('Workstation connected');
-                } else {
-                    console.log('RegisterNew Workstation');
-                    const workstation: Workstation = {
-                        id: createWorkstationCommand.id
-                    }; appState.workstations.push(workstation);
+        try {
+            const command: Command = JSON.parse(message);
+            const descriptor = commands.find((desc) => desc.name === command.type);
+            if (descriptor) {
+                console.log('Processing command:', command.type, descriptor.class);
+                try {
+                    appState = descriptor.class.prototype.reduce.call(command, appState);
+                } catch (e) {
+                    console.log('Failed to execute command:', command, appState);
                 }
-                break;
+            } else {
+                console.log('Unknown command:', command);
             }
-            case 'CreateTeam': {
-                const createTeamCommand = command as CreateTeamCommand;
-                console.log('Create Team');
-                const team: Team = {
-                    id: uuid(),
-                    name: createTeamCommand.name,
-                }
-                appState.teams.push(team);
-                break;
-            }
-            default: {
-                console.error('Unknown command!');
-                break;
-            }
-        };
-        sendStateToAll();
+            sendStateToAll();
+        } catch (e) {
+            console.log('Failed to process commend', message, e);
+        }
     });
 
     ws.on('close', function () {
-        //const client = getClient();
-        //client.ws = null;
-        console.log('Disconnected: ') //, client.clientId);
+        appState.workstations = [];
+        console.log('Disconnected.');
         sendStateToAll();
     });
+});
+
+app.get('/**', function (req, res) {
+    res.redirect('/');
 });
 
 app.listen(port, () => {
