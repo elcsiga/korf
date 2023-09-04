@@ -4,29 +4,21 @@
     BreadcrumbItem,
     Button,
     Heading,
-    Table,
-    TableBody,
-    TableBodyCell,
-    TableBodyRow,
-    TableHead,
-    TableHeadCell,
+    Modal,
   } from "flowbite-svelte";
   import { appState, send } from "../../../../state/state";
   import { Link, navigate } from "svelte-routing";
   import ButtonRow from "../../../../lib/ButtonRow.svelte";
   import {
-    CreatePlayerCommand,
     DeletePlayerCommand,
-    DeleteTeamCommand,
     UpdatePlayerCommand,
-    UpdateTeamCommand,
   } from "../../../../shared/commands/commands";
   import ConfirmationDialog from "../../../../lib/ConfirmationDialog.svelte";
-  import EditTeamDialog from "./EditTeamDialog.svelte";
   import type { Player, Team } from "../../../../shared/types";
   import PageTitle from "../../../../lib/PageTitle.svelte";
   import EditPlayerDialog from "./EditPlayerDialog.svelte";
   import FullPageError from "../../../../lib/FullPageError.svelte";
+  import TransitionContainer from "../../../../lib/transition/TransitionContainer.svelte";
 
   export let id: string;
   export let teamId: string;
@@ -49,14 +41,14 @@
     send(new UpdatePlayerCommand(team.id, e.detail));
 </script>
 
-{#if player}
-  <div>
+<TransitionContainer>
+  {#if player}
     <Breadcrumb>
       <BreadcrumbItem home><Link to="/">Home</Link></BreadcrumbItem>
       <BreadcrumbItem><Link to="/teams">Teams</Link></BreadcrumbItem>
-      <BreadcrumbItem
-        ><Link to="/teams/{team.id}">{team.name}</Link></BreadcrumbItem
-      >
+      <BreadcrumbItem>
+        <Link to="/teams/{team.id}">{team.name}</Link>
+      </BreadcrumbItem>
       <BreadcrumbItem>{player.name}</BreadcrumbItem>
     </Breadcrumb>
 
@@ -76,12 +68,10 @@
       <span slot="apply">Delete Player</span>
     </ConfirmationDialog>
 
-    <EditPlayerDialog
-      bind:open={editPlayerDialogOpen}
-      {player}
-      on:apply={editPlayer}
-    />
-  </div>
-{:else}
-  <FullPageError>No player found!</FullPageError>
-{/if}
+    <Modal bind:open={editPlayerDialogOpen}>
+      <EditPlayerDialog {player} on:apply={editPlayer} />
+    </Modal>
+  {:else}
+    <FullPageError>No player found!</FullPageError>
+  {/if}
+</TransitionContainer>

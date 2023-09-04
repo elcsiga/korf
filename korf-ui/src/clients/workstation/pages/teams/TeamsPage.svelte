@@ -3,7 +3,7 @@
     Breadcrumb,
     BreadcrumbItem,
     Button,
-    Heading,
+    Modal,
     Table,
     TableBody,
     TableBodyCell,
@@ -17,41 +17,48 @@
   import ButtonRow from "../../../../lib/ButtonRow.svelte";
   import type { Team } from "../../../../shared/types";
   import { CreateTeamCommand } from "../../../../shared/commands/commands";
-    import PageTitle from "../../../../lib/PageTitle.svelte";
+  import PageTitle from "../../../../lib/PageTitle.svelte";
+  import TransitionContainer from "../../../../lib/transition/TransitionContainer.svelte";
+  import { setStructureDepth } from "../../../../lib/transition/transitions";
 
-  let addTeamDialogOpen = false;
+  setStructureDepth(1);
+
+  let createTeamDialogOpen = false;
   const createTeam = (e: CustomEvent<Team>) =>
     send(new CreateTeamCommand(e.detail));
 </script>
 
-<Breadcrumb>
-  <BreadcrumbItem home><Link to="/">Home</Link></BreadcrumbItem>
-  <BreadcrumbItem>Teams</BreadcrumbItem>
-</Breadcrumb>
+<TransitionContainer>
+  <Breadcrumb>
+    <BreadcrumbItem home><Link to="/">Home</Link></BreadcrumbItem>
+    <BreadcrumbItem>Teams</BreadcrumbItem>
+  </Breadcrumb>
 
-<ButtonRow>
-  <Button on:click={() => (addTeamDialogOpen = true)}>Create Team</Button>
-</ButtonRow>
+  <ButtonRow>
+    <Button on:click={() => (createTeamDialogOpen = true)}>Create Team</Button>
+  </ButtonRow>
 
-<PageTitle>Teams</PageTitle>
+  <PageTitle>Teams</PageTitle>
 
-<Table hoverable={true}>
-  <TableHead>
-    <TableHeadCell>Team Name</TableHeadCell>
-  </TableHead>
-  {#if $appState?.teams.length}
-    <TableBody tableBodyClass="divide-y">
-      {#each $appState.teams as team}
-        <TableBodyRow>
-          <TableBodyCell on:click={() => navigate("/teams/" + team.id)}
-            >{team.name}</TableBodyCell
-          >
-        </TableBodyRow>
-      {/each}
-    </TableBody>
-  {:else}
-    No teams.
-  {/if}
-</Table>
-
-<EditTeamDialog bind:open={addTeamDialogOpen} on:apply={createTeam} />
+  <Table hoverable={true}>
+    <TableHead>
+      <TableHeadCell>Team Name</TableHeadCell>
+    </TableHead>
+    {#if $appState?.teams.length}
+      <TableBody tableBodyClass="divide-y">
+        {#each $appState.teams as team}
+          <TableBodyRow>
+            <TableBodyCell on:click={() => navigate("/teams/" + team.id)}
+              >{team.name}</TableBodyCell
+            >
+          </TableBodyRow>
+        {/each}
+      </TableBody>
+    {:else}
+      No teams.
+    {/if}
+  </Table>
+  <Modal bind:open={createTeamDialogOpen} autoclose>
+    <EditTeamDialog on:apply={createTeam} />
+  </Modal>
+</TransitionContainer>

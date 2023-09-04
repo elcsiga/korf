@@ -3,7 +3,7 @@
     Breadcrumb,
     BreadcrumbItem,
     Button,
-    Heading,
+    Modal,
     Table,
     TableBody,
     TableBodyCell,
@@ -24,7 +24,11 @@
   import type { Player, Team } from "../../../../shared/types";
   import PageTitle from "../../../../lib/PageTitle.svelte";
   import EditPlayerDialog from "./EditPlayerDialog.svelte";
-    import FullPageError from "../../../../lib/FullPageError.svelte";
+  import FullPageError from "../../../../lib/FullPageError.svelte";
+  import TransitionContainer from "../../../../lib/transition/TransitionContainer.svelte";
+  import { setStructureDepth } from "../../../../lib/transition/transitions";
+
+  setStructureDepth(2);
 
   export let id: string;
   let team;
@@ -40,13 +44,13 @@
   const editTeam = (e: CustomEvent<Team>) =>
     send(new UpdateTeamCommand(e.detail));
 
-  let addPlayerDialogOpen = false;
+  let createPlayerDialogOpen = false;
   const createPlayer = (e: CustomEvent<Player>) =>
     send(new CreatePlayerCommand(team.id, e.detail));
 </script>
 
-{#if team}
-  <div>
+<TransitionContainer>
+  {#if team}
     <Breadcrumb>
       <BreadcrumbItem home><Link to="/">Home</Link></BreadcrumbItem>
       <BreadcrumbItem><Link to="/teams">Teams</Link></BreadcrumbItem>
@@ -55,7 +59,9 @@
 
     <ButtonRow>
       <Button on:click={() => (editTeamDialogOpen = true)}>Edit</Button>
-      <Button on:click={() => (addPlayerDialogOpen = true)}>Add Player</Button>
+      <Button on:click={() => (createPlayerDialogOpen = true)}
+        >Add Player</Button
+      >
       <Button on:click={() => (deleteTeamDialogOpen = true)}>Delete</Button>
     </ButtonRow>
 
@@ -88,9 +94,13 @@
       <span slot="apply">Delete Team</span>
     </ConfirmationDialog>
 
-    <EditTeamDialog bind:open={editTeamDialogOpen} {team} on:apply={editTeam} />
-    <EditPlayerDialog bind:open={addPlayerDialogOpen} on:apply={createPlayer} />
-  </div>
-{:else}
-  <FullPageError>No team found!</FullPageError>
-{/if}
+    <Modal bind:open={editTeamDialogOpen} autoclose>
+      <EditTeamDialog {team} on:apply={editTeam} />
+    </Modal>
+    <Modal bind:open={createPlayerDialogOpen} autoclose>
+      <EditPlayerDialog on:apply={createPlayer} />
+    </Modal>
+  {:else}
+    <FullPageError>No team found!</FullPageError>
+  {/if}
+</TransitionContainer>

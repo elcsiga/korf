@@ -7,7 +7,6 @@
     import ButtonRow from "../../../../lib/ButtonRow.svelte";
     import InputField from "../../../../lib/InputField.svelte";
 
-    export let open = false;
     export let player: Player = {
         id: null,
         name: "",
@@ -17,6 +16,7 @@
     const playerName = field("name", player.name, [required()]);
     const playerNumber = field("number", player.number, [required()]);
     const playerForm = form(playerName, playerNumber);
+    playerForm.validate();
 
     const dispatch = createEventDispatcher<{ apply: Player }>();
     const apply = () =>
@@ -26,26 +26,20 @@
         } as Player);
 </script>
 
-<Modal bind:open autoclose>
-    <InputField
-        field={playerNumber}
-        label="Number"
-        placeholder="Number of the player"
-    />
-    <InputField
-        field={playerName}
-        label="Name"
-        placeholder="Name of the player"
-    />
+<InputField
+    field={playerNumber}
+    label="Number"
+    placeholder="Number of the player"
+/>
+<InputField field={playerName} label="Name" placeholder="Name of the player" />
 
-    <ButtonRow>
-        <Button disabled={!$playerForm.valid} on:click={apply}
-            >{#if player.id}
-                Edit Player
-            {:else}
-                Add Player
-            {/if}
-        </Button>
-        <Button color="alternative">Cancel</Button>
-    </ButtonRow>
-</Modal>
+<ButtonRow>
+    <Button disabled={!$playerForm.valid} on:click={apply}
+        >{#if player.id}
+            Edit Player
+        {:else}
+            Add Player
+        {/if}
+    </Button>
+    <Button color="alternative">Cancel</Button>
+</ButtonRow>

@@ -10,7 +10,7 @@
     <Label for="{$field.name}" class="block mb-2">{label}</Label>
     <Input bind:value={$field.value} id={$field.name} {placeholder} />
 
-    {#if $field.errors.includes("required")}
-        <Helper class="mt-2" color="red">Name is required</Helper>
+    {#if $field.dirty && $field.errors.includes("required")}
+        <Helper class="mt-2" color="red">{$field.name} is required!</Helper>
     {/if}
 </div>
