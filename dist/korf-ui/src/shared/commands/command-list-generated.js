@@ -1,14 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commands = void 0;
-const commands_1 = require("./commands");
+const field_1 = require("./commands/field");
+const player_1 = require("./commands/player");
+const team_1 = require("./commands/team");
+const workstation_1 = require("./commands/workstation");
 exports.commands = [
-    { name: 'ConnectWorkstationCommand', class: commands_1.ConnectWorkstationCommand },
-    { name: 'CreateTeamCommand', class: commands_1.CreateTeamCommand },
-    { name: 'DeleteTeamCommand', class: commands_1.DeleteTeamCommand },
-    { name: 'UpdateTeamCommand', class: commands_1.UpdateTeamCommand },
-    { name: 'CreatePlayerCommand', class: commands_1.CreatePlayerCommand },
-    { name: 'DeletePlayerCommand', class: commands_1.DeletePlayerCommand },
-    { name: 'UpdatePlayerCommand', class: commands_1.UpdatePlayerCommand },
+    { name: 'CreateFieldCommand', class: field_1.CreateFieldCommand },
+    { name: 'DeleteFieldCommand', class: field_1.DeleteFieldCommand },
+    { name: 'UpdateFieldCommand', class: field_1.UpdateFieldCommand },
+    { name: 'CreatePlayerCommand', class: player_1.CreatePlayerCommand },
+    { name: 'DeletePlayerCommand', class: player_1.DeletePlayerCommand },
+    { name: 'UpdatePlayerCommand', class: player_1.UpdatePlayerCommand },
+    { name: 'CreateTeamCommand', class: team_1.CreateTeamCommand },
+    { name: 'DeleteTeamCommand', class: team_1.DeleteTeamCommand },
+    { name: 'UpdateTeamCommand', class: team_1.UpdateTeamCommand },
+    { name: 'ConnectWorkstationCommand', class: workstation_1.ConnectWorkstationCommand },
 ];
 //# sourceMappingURL=command-list-generated.js.map

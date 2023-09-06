@@ -1,11 +1,11 @@
-import { commands } from "./command-list-generated";
-import { CreateTeamCommand } from "./commands";
+import type { AppState } from "../types";
 
 export interface CommandDescriptor {
     name: string;
     class: any;
 }
 
-export function prepareCommandFoToSend() {
-    commands.forEach((c) => console.log(c.class.prototype));
+export interface Command {
+    type?: string;
+    reduce(state: AppState): AppState
 }

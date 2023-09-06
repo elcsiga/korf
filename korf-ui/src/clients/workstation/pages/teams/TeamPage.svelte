@@ -14,11 +14,6 @@
   import { appState, send } from "../../../../state/state";
   import { Link, navigate } from "svelte-routing";
   import ButtonRow from "../../../../lib/ButtonRow.svelte";
-  import {
-    CreatePlayerCommand,
-    DeleteTeamCommand,
-    UpdateTeamCommand,
-  } from "../../../../shared/commands/commands";
   import ConfirmationDialog from "../../../../lib/ConfirmationDialog.svelte";
   import EditTeamDialog from "./EditTeamDialog.svelte";
   import type { Player, Team } from "../../../../shared/types";
@@ -27,6 +22,12 @@
   import FullPageError from "../../../../lib/FullPageError.svelte";
   import TransitionContainer from "../../../../lib/transition/TransitionContainer.svelte";
   import { setStructureDepth } from "../../../../lib/transition/transitions";
+  import {
+    DeleteTeamCommand,
+    UpdateTeamCommand,
+  } from "../../../../shared/commands/commands/team";
+  import { CreatePlayerCommand } from "../../../../shared/commands/commands/player";
+    import PageDetails from "../../../../lib/PageDetails.svelte";
 
   setStructureDepth(2);
 
@@ -66,6 +67,7 @@
     </ButtonRow>
 
     <PageTitle>{team.name}</PageTitle>
+    <PageDetails>{team.details}</PageDetails>
 
     <Table hoverable={true}>
       <TableHead>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, Modal } from "flowbite-svelte";
+    import { Button } from "flowbite-svelte";
     import { form, field } from "svelte-forms";
     import { required } from "svelte-forms/validators";
     import { type Player } from "../../../../shared/types";
@@ -9,13 +9,15 @@
 
     export let player: Player = {
         id: null,
-        name: "",
-        number: "",
+        name: '',
+        number: '',
+        details: ''
     };
 
     const playerName = field("name", player.name, [required()]);
     const playerNumber = field("number", player.number, [required()]);
-    const playerForm = form(playerName, playerNumber);
+    const playerDetails = field("details", player.details);
+    const playerForm = form(playerName, playerNumber, playerDetails);
     playerForm.validate();
 
     const dispatch = createEventDispatcher<{ apply: Player }>();
@@ -32,6 +34,7 @@
     placeholder="Number of the player"
 />
 <InputField field={playerName} label="Name" placeholder="Name of the player" />
+<InputField field={playerDetails} longText ={true} label="Details" placeholder="Player details" />
 
 <ButtonRow>
     <Button disabled={!$playerForm.valid} on:click={apply}

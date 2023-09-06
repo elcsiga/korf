@@ -9,16 +9,14 @@
   import { appState, send } from "../../../../state/state";
   import { Link, navigate } from "svelte-routing";
   import ButtonRow from "../../../../lib/ButtonRow.svelte";
-  import {
-    DeletePlayerCommand,
-    UpdatePlayerCommand,
-  } from "../../../../shared/commands/commands";
   import ConfirmationDialog from "../../../../lib/ConfirmationDialog.svelte";
   import type { Player, Team } from "../../../../shared/types";
   import PageTitle from "../../../../lib/PageTitle.svelte";
   import EditPlayerDialog from "./EditPlayerDialog.svelte";
   import FullPageError from "../../../../lib/FullPageError.svelte";
   import TransitionContainer from "../../../../lib/transition/TransitionContainer.svelte";
+    import { DeletePlayerCommand, UpdatePlayerCommand } from "../../../../shared/commands/commands/player";
+    import PageDetails from "../../../../lib/PageDetails.svelte";
 
   export let id: string;
   export let teamId: string;
@@ -59,6 +57,7 @@
 
     <Heading tag="h1">{player.number}</Heading>
     <PageTitle>{player.name}</PageTitle>
+    <PageDetails>{player.details}</PageDetails>
 
     <ConfirmationDialog
       bind:open={deletePlayerDialogOpen}
@@ -68,7 +67,7 @@
       <span slot="apply">Delete Player</span>
     </ConfirmationDialog>
 
-    <Modal bind:open={editPlayerDialogOpen}>
+    <Modal bind:open={editPlayerDialogOpen} autoclose>
       <EditPlayerDialog {player} on:apply={editPlayer} />
     </Modal>
   {:else}

@@ -1,1 +1,1 @@
-{"version":3,"file":"command-manager.js","sourceRoot":"","sources":["../../../../../korf-ui/src/shared/commands/command-manager.ts"],"names":[],"mappings":";;;AAAA,qEAAoD;AAQpD,SAAgB,sBAAsB;IAClC,iCAAQ,CAAC,OAAO,CAAC,CAAC,CAAC,EAAE,EAAE,CAAC,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,KAAK,CAAC,SAAS,CAAC,CAAC,CAAC;AAC5D,CAAC;AAFD,wDAEC"}
+{"version":3,"file":"command-manager.js","sourceRoot":"","sources":["../../../../../korf-ui/src/shared/commands/command-manager.ts"],"names":[],"mappings":""}

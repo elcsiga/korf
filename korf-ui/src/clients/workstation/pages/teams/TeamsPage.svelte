@@ -16,10 +16,10 @@
   import EditTeamDialog from "./EditTeamDialog.svelte";
   import ButtonRow from "../../../../lib/ButtonRow.svelte";
   import type { Team } from "../../../../shared/types";
-  import { CreateTeamCommand } from "../../../../shared/commands/commands";
   import PageTitle from "../../../../lib/PageTitle.svelte";
   import TransitionContainer from "../../../../lib/transition/TransitionContainer.svelte";
   import { setStructureDepth } from "../../../../lib/transition/transitions";
+    import { CreateTeamCommand } from "../../../../shared/commands/commands/team";
 
   setStructureDepth(1);
 

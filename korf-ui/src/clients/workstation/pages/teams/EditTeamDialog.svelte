@@ -9,12 +9,14 @@
 
     export let team: Team = {
         id: null,
-        name: "",
+        name: '',
         players: [],
+        details: '',
     };
 
     const teamName = field("name", team.name, [required()]);
-    const teamForm = form(teamName);
+    const teamDetails = field("details", team.details);
+    const teamForm = form(teamName, teamDetails);
     teamForm.validate();
 
     const dispatch = createEventDispatcher<{ apply: Team }>();
@@ -26,6 +28,7 @@
 </script>
 
 <InputField field={teamName} label="Name" placeholder="Name of the team" />
+<InputField field={teamDetails} longText ={true} label="Details" placeholder="Team details" />
 
 <ButtonRow>
     <Button disabled={!$teamForm.valid} on:click={apply}

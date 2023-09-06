@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const express_ws_1 = __importDefault(require("express-ws"));
+const path_1 = __importDefault(require("path"));
 const types_1 = require("../../korf-ui/src/shared/types");
 const command_list_generated_1 = require("../../korf-ui/src/shared/commands/command-list-generated");
 const storage_1 = require("./storage");
@@ -17,7 +18,7 @@ app.use(express_1.default.static('dist/public', {
     }
 }));
 let appState = types_1.initialAppState;
-(0, storage_1.load)((s) => appState = s);
+(0, storage_1.load)((loadedState) => appState = Object.assign(Object.assign({}, types_1.initialAppState), loadedState));
 let saveRequired = false;
 setInterval(() => {
     if (saveRequired) {
@@ -60,8 +61,8 @@ app.ws('/ws', (ws, req) => {
         sendStateToAll();
     });
 });
-app.get('/**', function (req, res) {
-    res.redirect('/');
+app.get('/*', (req, res) => {
+    res.sendFile(path_1.default.resolve(__dirname + '/../../public/index.html'));
 });
 app.listen(port, () => {
     console.log(`korf is listening at http://localhost:${port}`);

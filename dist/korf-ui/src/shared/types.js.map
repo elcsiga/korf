@@ -1,1 +1,1 @@
-{"version":3,"file":"types.js","sourceRoot":"","sources":["../../../../korf-ui/src/shared/types.ts"],"names":[],"mappings":";;;AAOa,QAAA,eAAe,GAAa;IACrC,YAAY,EAAE,EAAE;IAChB,KAAK,EAAE,EAAE;IACT,KAAK,EAAE,EAAE;CACZ,CAAA"}
+{"version":3,"file":"types.js","sourceRoot":"","sources":["../../../../korf-ui/src/shared/types.ts"],"names":[],"mappings":";;;AAQa,QAAA,eAAe,GAAa;IACrC,YAAY,EAAE,EAAE;IAChB,KAAK,EAAE,EAAE;IACT,KAAK,EAAE,EAAE;IACT,MAAM,EAAE,EAAE;CACb,CAAA"}

@@ -1,9 +1,10 @@
 import { derived, readable } from 'svelte/store';
 
 import type { AppState } from '../shared/types';
-import { type Command, ConnectWorkstationCommand } from '../shared/commands/commands';
 import { v4 as uuid } from 'uuid';
 import { commands } from '../shared/commands/command-list-generated';
+import type { Command } from '../shared/commands/command-manager';
+import { ConnectWorkstationCommand } from '../shared/commands/commands/workstation';
 
 const workstationIdStorageKey = 'korf-workstation-id';
 

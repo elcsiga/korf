@@ -1,14 +1,15 @@
 
 import express from 'express';
 import expressWs from 'express-ws';
+import path from 'path';
 
 import {
     initialAppState,
 } from '../../korf-ui/src/shared/types';
 
 import { commands } from '../../korf-ui/src/shared/commands/command-list-generated';
-import { Command } from '../../korf-ui/src/shared/commands/commands';
 import { save, load } from './storage';
+import { Command } from '../../korf-ui/src/shared/commands/command-manager';
 
 const { app, getWss } = expressWs(express());
 const port = process.env.PORT || 3000;
@@ -21,7 +22,7 @@ app.use(express.static('dist/public', {
 }));
 
 let appState = initialAppState;
-load((s) => appState = s);
+load((loadedState) => appState = {...initialAppState, ...loadedState});
 let saveRequired = false;
 setInterval(() => {
     if (saveRequired) {
@@ -65,9 +66,9 @@ app.ws('/ws', (ws, req) => {
     });
 });
 
-app.get('/**', function (req, res) {
-    res.redirect('/');
-});
+app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname + '/../../public/index.html'));
+})
 
 app.listen(port, () => {
     console.log(`korf is listening at http://localhost:${port}`)

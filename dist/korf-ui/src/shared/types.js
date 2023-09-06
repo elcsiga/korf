@@ -4,6 +4,7 @@ exports.initialAppState = void 0;
 exports.initialAppState = {
     workstations: [],
     games: [],
-    teams: []
+    teams: [],
+    fields: [],
 };
 //# sourceMappingURL=types.js.map
